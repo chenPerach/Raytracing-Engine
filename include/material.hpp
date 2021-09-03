@@ -3,11 +3,11 @@
 class Material
 {
 private:
-    Vec3f color;    
+    vec3f color;    
 public:
-    Material(const Vec3f color);
+    Material(const vec3f color);
     Material();
-    Vec3f get_color()const ;
+    vec3f get_color()const ;
     static Material transperent;
     inline bool operator==(const Material& other)const ;
 };

@@ -13,10 +13,10 @@ private:
     T data_[DIM];
 };
 
-typedef vec<2, float> Vec2f;
-typedef vec<3, float> Vec3f;
-typedef vec<3, int  > Vec3i;
-typedef vec<4, float> Vec4f;
+typedef vec<2, float> vec2f;
+typedef vec<3, float> vec3f;
+typedef vec<3, int  > vec3i;
+typedef vec<4, float> vec4f;
 
 template <typename T> struct vec<2,T> {
     vec() : x(T()), y(T()) {}

@@ -1,9 +1,9 @@
 #include "material.hpp"
 
-Material Material::transperent(Vec3f(-1, -1, -1));
-Material::Material() : color(Vec3f()) {}
-Material::Material(const Vec3f color) : color(color) {}
-Vec3f Material::get_color() const
+Material Material::transperent(vec3f(-1, -1, -1));
+Material::Material() : color(vec3f()) {}
+Material::Material(const vec3f color) : color(color) {}
+vec3f Material::get_color() const
 {
     return color;
 }

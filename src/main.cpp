@@ -6,47 +6,74 @@
 #include "geometry.hpp"
 #include "sphere.hpp"
 using namespace std;
-Vec3f cast_ray(const Vec3f& origin,const Vec3f& direction,const vector<Sphere>& spheres){
-	// if(s.ray_intersect(origin,direction))
-	// 	return Vec3f(0.4,0.4,0.3);
-	// return Vec3f(0.1,0.12,0.1);
-
-}
-void render() {
-	vector<Sphere> spheres;
-	spheres.push_back(Sphere(Vec3f(3.f,3.f,10.f),1.f,Material(Vec3f(0.2,0.3,0.4))));
-	spheres.push_back(Sphere(Vec3f(3.f,3.f,10.f),1.f,Material(Vec3f(0.2,0.3,0.4))));
-
-	const double fov  = 120;
-    const int width    = 1024;
-    const int height   = 768;
-    std::vector<Vec3f> framebuffer(width*height);
-	Vec3f origin(0,0,0);
-    for (int j = 0; j<height; j++) {
-        for (int i = 0; i<width; i++) {
-			float x =  ((2*i-width)/(float)width)*tan(fov*0.5)*width/(float)height;
-			float y = -((2*j-height)/(float)height)*tan(fov*0.5);
-			Vec3f direction = Vec3f(x,y,1).normalize();
-			framebuffer[i+j*width] = cast_ray(origin,direction,spheres);
+#define RADIANS(x) (x) * M_PI / 180
+vec3f cast_ray(const vec3f &origin, const vec3f &direction, vector<Sphere> &spheres)
+{
+    Sphere min_sphere;
+    float min_distance = numeric_limits<float>::max();
+    for (Sphere s : spheres)
+    {
+        if (s.ray_intersect(origin, direction))
+        {
+            float distance = s.get_distance(origin, direction);
+            if (distance < min_distance)
+            {
+                min_distance = distance;
+                min_sphere = s;
+            }
         }
     }
-	
+    return min_sphere.get_color();
+}
+void render()
+{
+    vector<Sphere> spheres;
+    spheres.push_back(Sphere(vec3f(0.f, 0.f, 2.f), .75f, Material(vec3f(0, 1, 0.0))));
+    spheres.push_back(Sphere(vec3f(1.5f, 1.5f, 1.5f), 1.f, Material(vec3f(1, 0, 0))));
+    spheres.push_back(Sphere(vec3f(-1.5f, -1.f, 1.f), 1.f, Material(vec3f(1, 0, 1))));
 
-	// save framebuffer to file
+    const double fov = RADIANS(90);
+    const int width = 1024;
+    const int height = 768;
+    std::vector<vec3f> framebuffer(width * height);
+    vec3f origin(0, 0, 0);
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            framebuffer[j + i * width] = vec3f(1.f, 1.f, 1.f);
+        }
+    }
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            float x =  (2*(j + 0.5)/(float)width  - 1)*tan(fov/2.)*width/(float)height;
+            float y = -(2*(i + 0.5)/(float)height - 1)*tan(fov/2.);
+            vec3f direction = vec3f(x, y, 1).normalize();
+            framebuffer[j + i * width] = cast_ray(origin, direction, spheres);
+        }
+    }
+
+    // save framebuffer to file
     std::ofstream ofs;
     ofs.open("./out.ppm");
-    ofs << "P6\n" << width << " " << height << "\n255\n";
-    for (size_t i = 0; i < height*width; ++i) {
-        for (size_t j = 0; j<3; j++) {
+    ofs << "P6\n"
+        << width << " " << height << "\n255\n";
+    for (size_t i = 0; i < height * width; ++i)
+    {
+        for (size_t j = 0; j < 3; j++)
+        {
             // write value between 0-255 to each pixle
-			ofs << (char)(255 * std::max(0.f, std::min(1.f, framebuffer[i][j])));
+            ofs << (char)(255 * std::max(0.f, std::min(1.f, framebuffer[i][j])));
         }
     }
     ofs.close();
 }
 
-int main() {
+int main()
+{
     render();
     return 0;
 }
-
