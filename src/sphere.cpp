@@ -15,10 +15,9 @@ vec3f Sphere::get_color() const
 }
 float Sphere::get_distance(const vec3f &origin, const vec3f &direction) const
 {
-    vec3f d_vectors = (pos - origin);
-    float d_distance = d_vectors.size() - radius, temp = d_distance;
-    vec3f p = pos;
-    while (abs((p - pos).size() -radius) >= 0.05)
+    float d_distance = (pos - origin).size() - radius;
+    vec3f p = origin;
+    while (abs((p - pos).size() -radius) >= 0.01)
     {
         p = p + direction * (d_distance - radius);
         d_distance = (p - pos).size();

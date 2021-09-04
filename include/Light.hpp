@@ -7,8 +7,8 @@ private:
     vec3f position;
 public:
     Light();
-    Light(float intensity,vec3f position);
-    inline float get_intesity() const;
-    inline vec3f get_position() const;
+    Light(vec3f position,float intensity);
+    float get_intesity() const;
+    vec3f get_position() const;
 };
 
