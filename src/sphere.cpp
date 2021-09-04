@@ -1,7 +1,7 @@
 #include "sphere.hpp"
 
-Sphere::Sphere(const vec3f center, const float radius) : pos(center), radius(radius), color() {}
-Sphere::Sphere(const vec3f center, const float radius, Material color) : pos(center), radius(radius), color(color) {}
+Sphere::Sphere(const vec3f center, const float radius) : pos(center), radius(radius), material() {}
+Sphere::Sphere(const vec3f center, const float radius, Material material) : pos(center), radius(radius), material(material) {}
 Sphere::Sphere() : pos(vec3f(0, 0, 0)), radius(0) {}
 
 bool Sphere::ray_intersect(const vec3f &origin, const vec3f &direction) const
@@ -11,7 +11,7 @@ bool Sphere::ray_intersect(const vec3f &origin, const vec3f &direction) const
 }
 vec3f Sphere::get_color() const
 {
-    return this->color.get_color();
+    return this->material.diffuse_color;
 }
 float Sphere::get_distance(const vec3f &origin, const vec3f &direction) const
 {
